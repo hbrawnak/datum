@@ -27,10 +27,20 @@ class UserRepository implements UserRepositoryInterface
     }
 
 
-    public function getUsers($offset = 0, $limit = 20)
+    public function getUsers($offset = 0, $limit = 20, $year = null, $month = null)
     {
-        return Cache::remember('users-' . $offset, 10, function () use ($offset, $limit) {
-            return $this->user->offset($offset)->limit($limit)->get();
+        return Cache::remember('users-' . $offset, 10, function () use ($offset, $limit, $year, $month) {
+            $user = $this->user;
+
+            if ($year) {
+                $user = $user->whereYear('birthday', '=', $year);
+            }
+
+            if ($month) {
+                $user = $user->whereMonth('birthday', '=', $month);
+            }
+
+            return $user->offset($offset)->limit($limit)->get();
         });
     }
 }

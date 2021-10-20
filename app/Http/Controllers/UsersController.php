@@ -9,7 +9,8 @@ class UsersController extends Controller
 {
     public function index(Request $request, UserRepository $userRepository)
     {
-        $users = $userRepository->getUsers();
+        //dd($request->get('year'));
+        $users = $userRepository->getUsers(0, 20, $request->get('year'), $request->get('month'));
         return view('users.index', ['users' => $users]);
     }
 }
