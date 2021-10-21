@@ -16,17 +16,21 @@ class UserRepository implements UserRepositoryInterface
     private $user;
 
     /**
-     * @var Cache
+     * @param User $user
      */
-    private $cache;
-
-    public function __construct(User $user, Cache $cache)
+    public function __construct(User $user)
     {
         $this->user  = $user;
-        $this->cache = $cache;
     }
 
 
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @param null $year
+     * @param null $month
+     * @return mixed
+     */
     public function getUsers($offset = 0, $limit = 20, $year = null, $month = null)
     {
         $user = $this->user;
