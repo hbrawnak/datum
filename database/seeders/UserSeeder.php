@@ -36,7 +36,8 @@ class UserSeeder extends Seeder
 
         $chunks = array_chunk($data_array, 1000);
         foreach ($chunks as $chunk) {
-             User::insert($chunk);
+            echo '.';
+            User::insert($chunk);
         }
     }
 }
