@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Cache;
 
 class UserRepository implements UserRepositoryInterface
 {
+    const CACHE_TTL = 60;
+
     /**
      * @var User
      */
@@ -20,7 +22,20 @@ class UserRepository implements UserRepositoryInterface
      */
     public function __construct(User $user)
     {
-        $this->user  = $user;
+        $this->user = $user;
+    }
+
+
+    /**
+     * @param int $offset
+     * @param int $limit
+     * @return mixed
+     */
+    public function all($limit = 500)
+    {
+        return Cache::remember('users:all', self::CACHE_TTL, function () use ($limit) {
+            return $this->user->limit($limit)->get();
+        });
     }
 
 
@@ -31,18 +46,28 @@ class UserRepository implements UserRepositoryInterface
      * @param null $month
      * @return mixed
      */
-    public function getUsers($offset = 0, $limit = 20, $year = null, $month = null)
+    public function find($year = null, $month = null)
     {
-        $user = $this->user;
+        $key = 'users:filter:' . $year . ':' . $month;
 
-        if ($year) {
-            $user = $user->whereYear('birthday', '=', $year);
+        if (!Cache::has($key)) {
+            Cache::forget(Cache::get('previous_stored_key'));
+
+            $user = $this->user;
+
+            if ($year) {
+                $user = $user->whereYear('birthday', '=', $year);
+            }
+
+            if ($month) {
+                $user = $user->whereMonth('birthday', '=', $month);
+            }
+
+            $users = $user->get();
+            Cache::add($key, $users, self::CACHE_TTL);
+            Cache::add('previous_stored_key', $key, self::CACHE_TTL);
         }
 
-        if ($month) {
-            $user = $user->whereMonth('birthday', '=', $month);
-        }
-
-        return $user->offset($offset)->limit($limit)->get();
+        return Cache::get($key);
     }
 }

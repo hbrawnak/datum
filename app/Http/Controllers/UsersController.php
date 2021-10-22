@@ -3,19 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Repository\UserRepository;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class UsersController extends Controller
 {
-    public function index(Request $request, UserRepository $userRepository, Cache $cache)
-    {
-        $year = $request->get('year');
-        $month = $request->get('month');
-        // If year or month cache in redis with ($year . $month . limit . offset) key
-        // else cache all data in redis
+    const rowPerPage = 20;
 
-        $users = $userRepository->getUsers(0, 20, $year, $month);
-        return view('users.index', ['users' => $users]);
+    /**
+     * @param Request $request
+     * @param UserRepository $userRepository
+     * @return Application|Factory|View
+     */
+    public function index(Request $request, UserRepository $userRepository)
+    {
+        $year  = $request->get('year');
+        $month = $request->get('month');
+        $page  = $request->get('page', 1);
+
+        if ($year || $month) {
+            $users = $userRepository->find($year, $month);
+        } else {
+            $users = $userRepository->all();
+        }
+
+        $data = new LengthAwarePaginator(
+            $users->forPage($page, self::rowPerPage), $users->count(), self::rowPerPage, $page
+        );
+
+        return view('users.index', ['users' => $data, 'year' => $year, 'month' => $month]);
     }
 }

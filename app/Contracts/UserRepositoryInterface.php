@@ -4,5 +4,7 @@ namespace App\Contracts;
 
 interface UserRepositoryInterface
 {
-    public function getUsers($offset, $limit, $year = null, $month = null);
+    public function all();
+
+    public function find($year, $month);
 }
