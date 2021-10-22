@@ -39,5 +39,6 @@ class UserSeeder extends Seeder
             echo '.';
             User::insert($chunk);
         }
+        echo PHP_EOL;
     }
 }
