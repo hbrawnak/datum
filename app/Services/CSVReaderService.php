@@ -4,9 +4,14 @@
 namespace App\Services;
 
 
-class CsvReaderService
+class CSVReaderService
 {
 
+    /**
+     * CSVReaderService constructor.
+     * @param $filename
+     * @param string $delimiter
+     */
     public function __construct($filename, $delimiter = "\t")
     {
         $this->file      = fopen($filename, 'r');
@@ -15,6 +20,9 @@ class CsvReaderService
         $this->header    = null;
     }
 
+    /**
+     * @return \Generator|void
+     */
     public function toArray()
     {
         $data_1901_50 = [];

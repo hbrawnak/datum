@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\User1900To1950;
 use App\Models\User1951To2000;
 use App\Models\User2001To2020;
-use App\Services\CsvReaderService;
+use App\Services\CSVReaderService;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
@@ -19,7 +18,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $file       = base_path('database/data/data.csv');
-        $csv_reader = new CsvReaderService($file, ",");
+        $csv_reader = new CSVReaderService($file, ",");
 
         echo 'Seeding data ..';
         foreach ($csv_reader->toArray() as $data) {
