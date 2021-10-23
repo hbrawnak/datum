@@ -29,7 +29,6 @@
     {{-- Datatable starts --}}
     @if (count($users) > 0)
         <div class="row">
-
             <div class="d-flex justify-content-end">
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
@@ -55,7 +54,6 @@
                 </nav>
             </div>
 
-
             <table class="table">
                 <thead>
                 <tr>
@@ -66,7 +64,6 @@
                     <th scope="col">Phone</th>
                     <th scope="col">IP</th>
                     <th scope="col">Country</th>
-
                 </tr>
                 </thead>
                 <tbody>
