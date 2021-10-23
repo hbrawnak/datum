@@ -106,7 +106,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function findByMonth($month)
     {
-        $key = 'users:filter:' . ':' . $month;
+        $key = 'users:filter:' . $month;
 
         if (!Cache::has($key)) {
             Cache::forget(Cache::get('previous_stored_key'));
