@@ -24,13 +24,21 @@ class UsersController extends Controller
         $month = $request->get('month');
         $page  = $request->get('page', 1);
 
-        if ($year || $month) {
+        if ($year && $month) {
             $users = $userRepository->findBy($year, $month);
+        } elseif ($year && !$month) {
+            $users = $userRepository->findByYear($year);
+        } elseif (!$year && $month) {
+            $users = $userRepository->findByMonth($month);
         } else {
             $users = $userRepository->all();
         }
 
-        $data = new LengthAwarePaginator($users->forPage($page, self::rowPerPage),  $users->count(),self::rowPerPage, $page);
+        $data = new LengthAwarePaginator(
+            $users->forPage($page, self::rowPerPage),
+            $users->count(),
+            self::rowPerPage,
+            $page);
 
         return view('users.index', ['users' => $data, 'year' => $year, 'month' => $month]);
     }
