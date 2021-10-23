@@ -46,7 +46,7 @@ class UserRepository implements UserRepositoryInterface
      * @param null $month
      * @return mixed
      */
-    public function find($year = null, $month = null)
+    public function findBy($year = null, $month = null)
     {
         $key = 'users:filter:' . $year . ':' . $month;
 

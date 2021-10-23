@@ -6,5 +6,5 @@ interface UserRepositoryInterface
 {
     public function all();
 
-    public function find($year, $month);
+    public function findBy($year, $month);
 }
