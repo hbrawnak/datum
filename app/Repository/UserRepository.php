@@ -7,10 +7,11 @@ namespace App\Repository;
 use App\Contracts\UserRepositoryInterface;
 use App\Models\User;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class UserRepository implements UserRepositoryInterface
 {
-    const CACHE_TTL = 60;
+    const TTL_ONE_MINUTE = 60;
 
     /**
      * @var User
@@ -18,11 +19,18 @@ class UserRepository implements UserRepositoryInterface
     private $user;
 
     /**
-     * @param User $user
+     * @var DB
      */
-    public function __construct(User $user)
+    private $db;
+
+    /**
+     * @param User $user
+     * @param DB $db
+     */
+    public function __construct(User $user, DB $db)
     {
         $this->user = $user;
+        $this->db = $db;
     }
 
 
@@ -33,8 +41,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function all($limit = 500)
     {
-        return Cache::remember('users:all', self::CACHE_TTL, function () use ($limit) {
-            return $this->user->limit($limit)->get();
+        return Cache::remember('users:all', self::TTL_ONE_MINUTE, function () use ($limit) {
+            return $this->db::table('users')->limit($limit)->get();
         });
     }
 
@@ -53,19 +61,19 @@ class UserRepository implements UserRepositoryInterface
         if (!Cache::has($key)) {
             Cache::forget(Cache::get('previous_stored_key'));
 
-            $user = $this->user;
+            $user = $this->db::table('users');
 
             if ($year) {
-                $user = $user->whereYear('birthday', '=', $year);
+                $user = $user->where('year', '=', $year);
             }
 
             if ($month) {
-                $user = $user->whereMonth('birthday', '=', $month);
+                $user = $user->where('month', '=', $month);
             }
 
             $users = $user->get();
-            Cache::add($key, $users, self::CACHE_TTL);
-            Cache::add('previous_stored_key', $key, self::CACHE_TTL);
+            Cache::add($key, $users, self::TTL_ONE_MINUTE);
+            Cache::add('previous_stored_key', $key, self::TTL_ONE_MINUTE);
         }
 
         return Cache::get($key);
