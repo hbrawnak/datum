@@ -4,15 +4,33 @@
 namespace App\Services;
 
 
+use Generator;
+
 class CSVReaderService
 {
+    /**
+     * @var false|resource
+     */
+    private $file;
+    /**
+     * @var string
+     */
+    private $delimiter;
+    /**
+     * @var int
+     */
+    private $iterator;
+    /**
+     * @var null
+     */
+    private $header;
 
     /**
      * CSVReaderService constructor.
      * @param $filename
      * @param string $delimiter
      */
-    public function __construct($filename, $delimiter = "\t")
+    public function __construct($filename, string $delimiter = "\t")
     {
         $this->file      = fopen($filename, 'r');
         $this->delimiter = $delimiter;
@@ -21,16 +39,16 @@ class CSVReaderService
     }
 
     /**
-     * @return \Generator|void
+     * @return Generator
      */
-    public function toArray()
+    public function toArray(): Generator
     {
         $data_1901_50 = [];
         $data_1951_00 = [];
         $data_2001_20 = [];
 
         while (($row = fgetcsv($this->file, 300, $this->delimiter)) !== false) {
-            $is_mul_10000 = false;
+            $remaining = false;
             if (!$this->header) {
                 $this->header = ['id', 'email', 'name', 'birthday', 'phone', 'ip', 'country', 'year', 'month'];
             } else {
@@ -52,7 +70,7 @@ class CSVReaderService
 
 
                 if ($this->iterator != 0 && $this->iterator % 300 == 0) {
-                    $is_mul_10000       = true;
+                    $remaining       = true;
 
                     $chunk_data_1901_50 = $data_1901_50;
                     $chunk_data_1951_00 = $data_1951_00;
@@ -71,13 +89,12 @@ class CSVReaderService
         }
 
         fclose($this->file);
-        if (!$is_mul_10000) {
+        if (!$remaining) {
             yield [
                 '1901-1950' => $data_1901_50,
                 '1951-2000' => $data_1951_00,
                 '2001-2020' => $data_2001_20
             ];
         }
-        return;
     }
 }
