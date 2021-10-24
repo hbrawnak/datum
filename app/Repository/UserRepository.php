@@ -39,7 +39,7 @@ class UserRepository implements UserRepositoryInterface
      * @param int $limit
      * @return mixed
      */
-    public function all($limit = 100)
+    public function all(int $limit = 100)
     {
         return Cache::remember('users:all', self::TTL_ONE_MINUTE, function () use ($limit) {
             return $this->user
@@ -50,11 +50,11 @@ class UserRepository implements UserRepositoryInterface
 
 
     /**
-     * @param null $year
-     * @param null $month
+     * @param int $year
+     * @param int $month
      * @return mixed
      */
-    public function findBy($year, $month)
+    public function findBy(int $year, int $month)
     {
         $key = 'users:filter:' . $year . ':' . $month;
 
@@ -76,10 +76,10 @@ class UserRepository implements UserRepositoryInterface
 
 
     /**
-     * @param $year
+     * @param int $year
      * @return mixed
      */
-    public function findByYear($year)
+    public function findByYear(int $year)
     {
         $key = 'users:filter:' . $year;
 
@@ -101,10 +101,10 @@ class UserRepository implements UserRepositoryInterface
 
 
     /**
-     * @param $month
+     * @param int $month
      * @return mixed
      */
-    public function findByMonth($month)
+    public function findByMonth(int $month)
     {
         $key = 'users:filter:' . $month;
 

@@ -6,9 +6,9 @@ interface UserRepositoryInterface
 {
     public function all();
 
-    public function findBy($year, $month);
+    public function findBy(int $year, int $month);
 
-    public function findByYear($year);
+    public function findByYear(int $year);
 
-    public function findByMonth($month);
+    public function findByMonth(int $month);
 }
