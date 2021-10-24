@@ -3,9 +3,6 @@
 namespace Database\Seeders;
 
 use App\DBHelper;
-use App\Models\User1900To1950;
-use App\Models\User1951To2000;
-use App\Models\User2001To2020;
 use App\Services\CSVReaderService;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
