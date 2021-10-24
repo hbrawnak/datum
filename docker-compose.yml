@@ -1,20 +1,16 @@
-# For more information: https://laravel.com/docs/sail
 version: '3'
 services:
-    laravel.test:
+    app:
         build:
-            context: ./vendor/laravel/sail/runtimes/8.0
+            context: .docker
             dockerfile: Dockerfile
-            args:
-                WWWGROUP: '${WWWGROUP}'
         image: sail-8.0/app
+        container_name: datum
         extra_hosts:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
         environment:
-            WWWUSER: '${WWWUSER}'
-            LARAVEL_SAIL: 1
             XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
             XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
         volumes:
@@ -28,6 +24,7 @@ services:
         image: 'postgres:13'
         ports:
             - '${FORWARD_DB_PORT:-5432}:5432'
+        container_name: datum_pgsql
         environment:
             PGPASSWORD: '${DB_PASSWORD:-secret}'
             POSTGRES_DB: '${DB_DATABASE}'
@@ -45,6 +42,7 @@ services:
         image: 'redis:alpine'
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
+        container_name: datum_redis
         volumes:
             - 'sailredis:/data'
         networks:
