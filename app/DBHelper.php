@@ -11,18 +11,20 @@ class DBHelper
     const USER_2001_TO_2020 = 'user2001_to2020s';
 
 
-    public static function getTable($year)
+    /**
+     * @param $year
+     * @return string
+     */
+    public static function getTable($year): string
     {
-        if ($year < 1951) {
-            return self::USER_1900_TO_1950;
-        }
-
-        if ($year < 2001 && $year >= 1951) {
-            return self::USER_1951_TO_2000;
-        }
-
-        if ($year >= 2001) {
-            return self::USER_2001_TO_2020;
+        switch ($year) {
+            case ($year < 1951):
+                return self::USER_1900_TO_1950;
+            case ($year < 2001 && $year >= 1951):
+                return self::USER_1951_TO_2000;
+            case ($year >= 2001):
+            default:
+                return self::USER_2001_TO_2020;
         }
     }
 
