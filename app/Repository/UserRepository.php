@@ -36,23 +36,6 @@ class UserRepository implements UserRepositoryInterface
 
 
     /**
-     * @param int $limit
-     * @return mixed
-     */
-    public function all(int $limit = 100)
-    {
-        return Cache::remember('users:all', self::TTL_ONE_MINUTE, function () use ($limit) {
-            return $this->user
-                ->select('id', 'name', 'email', 'birthday', 'phone', 'ip', 'country')
-                ->limit($limit)
-                ->orderBy('year')
-                ->orderBy('month')
-                ->get();
-        });
-    }
-
-
-    /**
      * @param int $year
      * @param int $month
      * @return mixed

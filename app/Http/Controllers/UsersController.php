@@ -31,7 +31,7 @@ class UsersController extends Controller
         } elseif (!$year && $month) {
             $users = $userRepository->findByMonth($month);
         } else {
-            $users = $userRepository->all();
+            return view('users.index', ['users' => [], 'year' => $year, 'month' => $month]);
         }
 
         $data = new LengthAwarePaginator(
