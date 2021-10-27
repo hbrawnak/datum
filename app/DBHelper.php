@@ -19,13 +19,17 @@ class DBHelper
     {
         switch ($year) {
             case ($year < 1951):
-                return self::USER_1900_TO_1950;
+                $table = self::USER_1900_TO_1950;
+                break;
             case ($year < 2001 && $year >= 1951):
-                return self::USER_1951_TO_2000;
+                $table = self::USER_1951_TO_2000;
+                break;
             case ($year >= 2001):
             default:
-                return self::USER_2001_TO_2020;
+                $table = self::USER_2001_TO_2020;
         }
+
+        return $table;
     }
 
 }
