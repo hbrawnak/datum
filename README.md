@@ -1,8 +1,9 @@
 # datum
 
 
-###Overview:
- In the last 6 days I have tried to get a better output. In a short time, I have decided to split the table into 3 parts like birth year 1900 to 1950, 1951 to  2000 and 2001 to 2020. And seeded data from CSV to those tables following the birth year. Hopeful seeding data will not be out of memory limit. I have tried to handle this carefully.
+## Overview:
+
+Datum is an example of managing large set of data. I have decided to split the table into 3 parts like birth year 1900 to 1950, 1951 to  2000 and 2001 to 2020. And seeded data from CSV to those tables following the birth year. Hopeful seeding data will not be out of memory limit. I have tried to handle this carefully.
 
 I have created separate columns for year and date for filtering and indexed both columns in the tables. My thought was that every single query in the database should not extract birthday to pick date and year. So when data is seeding I have separated year and date. 
 
